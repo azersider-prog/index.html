@@ -1,32 +1,23 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مركز المكافآت</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://sad.adsgram.ai/js/adsgram.js"></script>
-    <style>
-        body { font-family: sans-serif; background: #0f172a; color: #fff; text-align: center; padding-top: 50px; margin: 0; }
-        .box { background: #1e293b; padding: 25px; border-radius: 12px; max-width: 300px; margin: auto; }
-        button { background: #3b82f6; color: white; border: none; padding: 15px; border-radius: 8px; width: 100%; font-size: 16px; cursor: pointer; }
-    </style>
+    <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 </head>
 <body>
-    <div class="box">
-        <h2>🎁 ربح النقاط</h2>
-        <button id="adBtn">مشاهدة الإعلان 📺</button>
-        <p id="msg"></p>
-    </div>
+    <button id="ad-btn" style="padding: 20px; font-size: 20px;">مشاهدة الإعلان</button>
+    <p id="msg"></p>
+
     <script>
-        const adController = window.Adsgram.init({ blockId: "42932" });
-        document.getElementById("adBtn").addEventListener("click", async () => {
-            try {
-                await adController.show();
-                document.getElementById("msg").innerText = "✅ تم بنجاح!";
-            } catch (err) {
-                document.getElementById("msg").innerText = "⚠️ لم يكتمل الإعلان.";
-            }
+        const AdController = window.Adsgram.init({ blockId: "42932" });
+        document.getElementById("ad-btn").addEventListener("click", () => {
+            AdController.show().then((result) => {
+                document.getElementById("msg").innerText = "تمت المشاهدة!";
+            }).catch((err) => {
+                document.getElementById("msg").innerText = "خطأ: " + err;
+            });
         });
     </script>
 </body>
