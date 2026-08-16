@@ -3,29 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مركز الإعلانات</title>
+    <title>لوحة الأرباح ومشاهدة الإعلانات</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
     <style>
-        body { font-family: sans-serif; background: #0f172a; color: #fff; text-align: center; padding-top: 50px; margin: 0; }
-        .box { background: #1e293b; padding: 25px; border-radius: 12px; max-width: 300px; margin: auto; }
-        button { background: #3b82f6; color: white; border: none; padding: 15px; border-radius: 8px; width: 100%; font-size: 16px; cursor: pointer; }
+        body { font-family: sans-serif; background: #0f172a; color: #fff; text-align: center; padding-top: 30px; margin: 0; }
+        .box { background: #1e293b; padding: 20px; border-radius: 12px; max-width: 320px; margin: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        h2 { margin-bottom: 10px; font-size: 20px; }
+        .user-info { background: #0f172a; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 14px; color: #38bdf8; }
+        button { background: #3b82f6; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-size: 16px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #2563eb; }
+        #msg { margin-top: 15px; font-size: 14px; }
     </style>
 </head>
 <body>
     <div class="box">
-        <h2>💰 ربح النقاط</h2>
-        <button id="ad-btn">📺 مشاهدة الإعلان</button>
-        <p id="msg" style="margin-top: 15px; font-size: 14px;"></p>
+        <h2>💰 لوحة الأرباح</h2>
+        <div class="user-info" id="user-details">جاري تحميل بيانات المستخدم...</div>
+        <button id="ad-btn">📺 مشاهدة الإعلان للربح</button>
+        <p id="msg"></p>
     </div>
 
     <script>
+        // قراءة المعرف والرصيد المرسل من البوت عبر الرابط
+        const urlParams = new URLSearchParams(window.location.search);
+        const uid = urlParams.get('uid') || 'غير معروف';
+        const balance = urlParams.get('balance') || '0';
+
+        document.getElementById('user-details').innerHTML = 
+            `👤 المعرف: <b>${uid}</b><br>💰 الرصيد: <b>${balance}</b> نقطة`;
+
+        // إعداد إعلانات Adsgram
         const adController = window.Adsgram.init({ blockId: "43004" });
+        
         document.getElementById("ad-btn").addEventListener("click", async () => {
-            document.getElementById("msg").innerText = "جاري تحميل الإعلان...";
+            document.getElementById("msg").innerText = "⏳ جاري تحميل الإعلان...";
             try {
                 await adController.show();
-                document.getElementById("msg").innerText = "✅ تم بنجاح!";
+                document.getElementById("msg").innerText = "✅ تم مشاهدة الإعلان بنجاح!";
             } catch (err) {
                 document.getElementById("msg").innerText = "⚠️ خطأ: " + JSON.stringify(err);
             }
