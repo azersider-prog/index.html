@@ -71,10 +71,10 @@
             console.error("خطأ في قراءة الخدمات:", e);
         }
 
-        // دالة عرض الخدمات الخاصة بكل منصة عند الضغط عليها
+        // دالة عرض الخدمات الخاصة بكل منصة عند الضغط عليها (تم تصحيح الخطأ هنا)
         function showServices(platform) {
             tg.HapticFeedback.impactOccurred('light');
-            document.getElementById('category-titleinnerHTML` = `<i class="fa-solid fa-cart-shopping"></i> خدمات ${platform}`;
+            document.getElementById('category-title').innerHTML = `<i class="fa-solid fa-cart-shopping"></i> خدمات ${platform}`;
             
             const filtered = servicesData.filter(s => s.category.toLowerCase() === platform.toLowerCase());
             
