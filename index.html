@@ -3,46 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة الأرباح ومشاهدة الإعلانات</title>
+    <title>لوحة خدمات الرشق وأرباح الإعلانات</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
     <style>
-        body { font-family: sans-serif; background: #0f172a; color: #fff; text-align: center; padding-top: 30px; margin: 0; }
-        .box { background: #1e293b; padding: 20px; border-radius: 12px; max-width: 320px; margin: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
-        h2 { margin-bottom: 10px; font-size: 20px; }
-        .user-info { background: #0f172a; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 14px; color: #38bdf8; }
-        button { background: #3b82f6; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-size: 16px; cursor: pointer; font-weight: bold; }
-        button:hover { background: #2563eb; }
-        #msg { margin-top: 15px; font-size: 14px; }
+        body { font-family: sans-serif; background: #0f172a; color: #fff; margin: 0; padding: 15px; text-align: center; }
+        .container { max-width: 400px; margin: auto; }
+        .card { background: #1e293b; padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); text-align: right; }
+        .card h3 { margin-top: 0; font-size: 16px; color: #38bdf8; border-bottom: 1px solid #334155; padding-bottom: 8px; }
+        .user-box { background: #0f172a; padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 15px; font-size: 14px; }
+        .btn { background: #3b82f6; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-size: 16px; cursor: pointer; font-weight: bold; margin-top: 5px; }
+        .btn:hover { background: #2563eb; }
+        .service-item { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px dashed #334155; }
+        #msg { margin-top: 10px; font-size: 14px; text-align: center; }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h2>💰 لوحة الأرباح</h2>
-        <div class="user-info" id="user-details">جاري تحميل بيانات المستخدم...</div>
-        <button id="ad-btn">📺 مشاهدة الإعلان للربح</button>
-        <p id="msg"></p>
+    <div class="container">
+        <!-- معلومات المستخدم -->
+        <div class="user-box" id="user-details">
+            👤 جاري تحميل بيانات المستخدم...
+        </div>
+
+        <!-- قسم مشاهدة الإعلانات لربح النقاط -->
+        <div class="card" style="text-align: center;">
+            <h3>📺 ربح النقاط عبر الإعلانات</h3>
+            <button class="btn" id="ad-btn">مشاهدة الإعلان 🎬</button>
+            <p id="msg"></p>
+        </div>
+
+        <!-- قائمة الخدمات المتاحة -->
+        <div class="card">
+            <h3>🛒 أمثلة من خدمات الرشق المتوفرة</h3>
+            <div class="service-item"><span>📸 Instagram Views</span><span>15 نقطة</span></div>
+            <div class="service-item"><span>👥 Facebook Followers</span><span>2750 نقطة</span></div>
+            <div class="service-item"><span>🎵 TikTok Views</span><span>1000 نقطة</span></div>
+            <div class="service-item"><span>📢 Telegram Members</span><span>1250 نقطة</span></div>
+            <div class="service-item"><span>▶️ Youtube Short Likes</span><span>10000 نقطة</span></div>
+        </div>
+
+        <!-- المحفظة والعملات الرقمية -->
+        <div class="card">
+            <h3>💎 المحفظة وعناوين الشحن</h3>
+            <p style="font-size: 12px; word-break: break-all; margin: 5px 0;">🔹 <b>BNB:</b> <br><code>0x77a0abd8da44400bf11420409aa6b24f4809ff17</code></p>
+            <p style="font-size: 12px; word-break: break-all; margin: 5px 0;">🔹 <b>TON:</b> <br><code>UQCvg-_-aVBISkq8-EjJzsvEhmaq6MpUEThA39EE6eUklq27</code></p>
+        </div>
     </div>
 
     <script>
-        // قراءة المعرف والرصيد المرسل من البوت عبر الرابط
+        // استقبال المعرف والرصيد المرسل من البوت
         const urlParams = new URLSearchParams(window.location.search);
         const uid = urlParams.get('uid') || 'غير معروف';
         const balance = urlParams.get('balance') || '0';
 
         document.getElementById('user-details').innerHTML = 
-            `👤 المعرف: <b>${uid}</b><br>💰 الرصيد: <b>${balance}</b> نقطة`;
+            `👤 المعرف: <b>${uid}</b> | 💰 الرصيد الحالي: <b>${balance}</b> نقطة`;
 
-        // إعداد إعلانات Adsgram
+        // تفعيل إعلانات Adsgram (Block ID الخاص بك)
         const adController = window.Adsgram.init({ blockId: "43004" });
         
         document.getElementById("ad-btn").addEventListener("click", async () => {
             document.getElementById("msg").innerText = "⏳ جاري تحميل الإعلان...";
             try {
                 await adController.show();
-                document.getElementById("msg").innerText = "✅ تم مشاهدة الإعلان بنجاح!";
+                document.getElementById("msg").innerText = "✅ تمت مشاهدة الإعلان بنجاح!";
             } catch (err) {
-                document.getElementById("msg").innerText = "⚠️ خطأ: " + JSON.stringify(err);
+                document.getElementById("msg").innerText = "⚠️ تعذر عرض الإعلان حالياً.";
             }
         });
     </script>
