@@ -6,79 +6,54 @@
     <title>BoostPro Dashboard</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
-    <!-- استدعاء مكتبة أيقونات FontAwesome لعرض شعارات السوشيال ميديا بدقة -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --bg: #0f172a; --card: #1e293b; --accent: #3b82f6; --text: #f8fafc; }
-        body { font-family: sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 70px; }
-        .header { background: var(--card); padding: 20px; border-radius: 0 0 20px 20px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
-        .balance-val { font-size: 24px; font-weight: bold; color: #38bdf8; margin: 10px 0; }
-        .nav-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; padding: 0 15px; margin-bottom: 20px; }
-        .nav-item { background: var(--card); padding: 12px 5px; border-radius: 12px; font-size: 11px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-        .nav-item i { display: block; font-size: 22px; margin-bottom: 6px; }
-        .section { padding: 0 15px; }
-        .card { background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
-        .btn-ad { background: var(--accent); color: white; border: none; padding: 14px; border-radius: 12px; width: 100%; font-weight: bold; margin-top: 10px; cursor: pointer; }
-        .btn-ad:hover { background: #2563eb; }
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--card); display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #334155; }
-        .tab-btn { background: none; border: none; color: #94a3b8; font-size: 12px; cursor: pointer; }
-        .tab-btn:hover { color: #38bdf8; }
+        :root { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --accent: #3b82f6; }
+        body { font-family: sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; }
+        .card { background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 15px; }
+        .header-info { text-align: center; margin-bottom: 20px; font-size: 14px; }
+        .btn-ad { background: var(--accent); color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer; }
+        .service-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #334155; font-size: 14px; }
+        .service-item:last-child { border-bottom: none; }
+        .icon-box { margin-left: 10px; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div id="user-info" style="font-size: 14px; color: #94a3b8;">👤 جاري التحميل...</div>
-        <div class="balance-val" id="bal-display">0 نقطة</div>
-        <button class="btn-ad" id="ad-btn"><i class="fa-solid fa-tv"></i> مشاهدة إعلان لربح النقاط</button>
-        <p id="msg" style="font-size: 12px; margin-top: 8px;"></p>
+    <div class="card header-info">
+        <div id="user-info">👤 المعرف: ...</div>
+        <div style="font-size: 20px; font-weight: bold; margin: 10px 0;">💰 الرصيد الحالي: <span id="bal-display">0</span> نقطة</div>
     </div>
 
-    <!-- شبكة المنصات مع الأيقونات الرسمية والملونة -->
-    <div class="nav-grid">
-        <div class="nav-item">
-            <i class="fa-brands fa-tiktok" style="color: #000000; background: #fff; padding: 4px; border-radius: 6px;"></i>تيك توك
-        </div>
-        <div class="nav-item">
-            <i class="fa-brands fa-youtube" style="color: #ff0000;"></i>يوتيوب
-        </div>
-        <div class="nav-item">
-            <i class="fa-brands fa-instagram" style="background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>إنستغرام
-        </div>
-        <div class="nav-item">
-            <i class="fa-brands fa-facebook" style="color: #1877f2;"></i>فيسبوك
-        </div>
-        <div class="nav-item">
-            <i class="fa-brands fa-twitter" style="color: #1da1f2;"></i>تويتر
-        </div>
+    <div class="card">
+        <h3 style="margin-top: 0;"><i class="fa-solid fa-tv"></i> ربح النقاط عبر الإعلانات</h3>
+        <button class="btn-ad" id="ad-btn">مشاهدة الإعلان 🎬</button>
+        <p id="msg" style="font-size: 12px; margin-top: 10px; text-align: center;"></p>
     </div>
 
-    <div class="section">
-        <div class="card">
-            <h3 style="font-size: 15px; margin-top: 0; color: #38bdf8;"><i class="fa-solid fa-wallet"></i> المحفظة وعناوين الشحن</h3>
-            <p style="font-size: 11px; word-break: break-all; margin: 8px 0;">🔹 <b>BNB:</b><br><code>0x77a0abd8da44400bf11420409aa6b24f4809ff17</code></p>
-            <p style="font-size: 11px; word-break: break-all; margin: 8px 0;">🔹 <b>TON:</b><br><code>UQCvg-_-aVBISkq8-EjJzsvEhmaq6MpUEThA39EE6eUklq27</code></p>
-        </div>
+    <div class="card">
+        <h3 style="margin-top: 0;"><i class="fa-solid fa-cart-shopping"></i> أمثلة من خدمات الرشق المتوفرة</h3>
+        <div class="service-item"><span>Instagram Views <i class="fa-brands fa-instagram icon-box"></i></span> <span>15 نقطة</span></div>
+        <div class="service-item"><span>Facebook Followers <i class="fa-brands fa-facebook icon-box"></i></span> <span>2750 نقطة</span></div>
+        <div class="service-item"><span>TikTok Views <i class="fa-brands fa-tiktok icon-box"></i></span> <span>1000 نقطة</span></div>
+        <div class="service-item"><span>Telegram Members <i class="fa-brands fa-telegram icon-box"></i></span> <span>1250 نقطة</span></div>
+        <div class="service-item"><span>Youtube Short Likes <i class="fa-brands fa-youtube icon-box"></i></span> <span>10000 نقطة</span></div>
     </div>
 
-    <div class="bottom-nav">
-        <button class="tab-btn"><i class="fa-solid fa-house"></i> الرئيسية</button>
-        <button class="tab-btn"><i class="fa-solid fa-cart-shopping"></i> الخدمات</button>
-        <button class="tab-btn"><i class="fa-solid fa-list-check"></i> الطلبات</button>
-        <button class="tab-btn"><i class="fa-solid fa-gear"></i> الإعدادات</button>
+    <div class="card">
+        <h3 style="margin-top: 0;"><i class="fa-solid fa-wallet"></i> المحفظة وعناوين الشحن</h3>
+        <p style="font-size: 12px;">BNB: <code>0x77a0abd8da44400bf11420409aa6b24f4809ff17</code></p>
+        <p style="font-size: 12px;">TON: <code>UQCvg-_-aVBISkq8-EjJzsvEhmaq6MpUEThA39EE6eUklq27</code></p>
     </div>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
-        const uid = urlParams.get('uid') || '...';
-        const bal = urlParams.get('balance') || '0';
-        document.getElementById('user-info').innerHTML = `👤 المعرف: <b>${uid}</b>`;
-        document.getElementById('bal-display').innerText = `${bal} نقطة`;
+        document.getElementById('user-info').innerText = `👤 المعرف: ${urlParams.get('uid') || '...'}`;
+        document.getElementById('bal-display').innerText = urlParams.get('balance') || '0';
 
         const adController = window.Adsgram.init({ blockId: "43004" });
         document.getElementById("ad-btn").onclick = async () => {
-            document.getElementById("msg").innerText = "⏳ جاري التحميل...";
-            try { await adController.show(); document.getElementById("msg").innerText = "✅ تمت مشاهدة الإعلان بنجاح!"; }
-            catch(e) { document.getElementById("msg").innerText = "⚠️ تعذر عرض الإعلان حالياً."; }
+            try { await adController.show(); document.getElementById('msg').innerText = "تم بنجاح!"; }
+            catch(e) { document.getElementById('msg').innerText = "تعذر العرض"; }
         };
     </script>
 </body>
