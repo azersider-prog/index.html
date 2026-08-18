@@ -172,15 +172,25 @@
             document.getElementById('copy-msg').innerText = "✅ تم نسخ عنوان الشحن بنجاح!";
         }
 
+        // تهيئة إعلانات Adsgram وإرسال المكافأة للبوت عند اكتمال مشاهدة الإعلان
         const adController = window.Adsgram.init({ blockId: "43004" });
         document.getElementById("ad-btn").onclick = async () => {
             tg.HapticFeedback.notificationOccurred('success');
             document.getElementById("msg").innerText = "⏳ جاري تحميل الإعلان...";
             try { 
                 await adController.show(); 
-                document.getElementById("msg").innerText = "✅ تمت مشاهدة الإعلان بنجاح!"; 
+                document.getElementById("msg").innerText = "✅ تمت مشاهدة الإعلان بنجاح! جاري إضافة المكافأة..."; 
+                
+                // إرسال البيانات للبوت عبر Telegram WebApp API
+                if (uid && uid !== '...') {
+                    const rewardPayload = JSON.stringify({
+                        action: "add_ad_reward",
+                        uid: parseInt(uid)
+                    });
+                    tg.sendData(rewardPayload);
+                }
             } catch(e) { 
-                document.getElementById("msg").innerText = "⚠️ تعذر عرض الإعلان حالياً."; 
+                document.getElementById("msg").innerText = "⚠️ تعذر عرض الإعلان حالياً أو تم تخطيه."; 
             }
         };
     </script>
