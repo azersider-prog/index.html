@@ -41,7 +41,7 @@
         <p id="msg" style="font-size: 12px; margin-top: 8px;"></p>
     </div>
 
-    <!-- المنصات والخدمات والمحفظة كما هي في كودك الأصلي -->
+    <!-- المنصات والخدمات -->
     <div class="nav-grid">
         <button class="nav-btn btn-tiktok" onclick="showServices('TikTok')"><i class="fa-brands fa-tiktok"></i></button>
         <button class="nav-btn btn-youtube" onclick="showServices('Youtube')"><i class="fa-brands fa-youtube"></i></button>
@@ -59,20 +59,41 @@
         const tg = window.Telegram.WebApp;
         tg.ready();
 
-        // (يتم ترك باقي الدوال الخاصة بالخدمات والمحفظة كما هي...)
-        // ... [هنا ضع باقي دوال الـ JavaScript الخاصة بك للخدمات والمحفظة] ...
+        // قراءة المعرف والرصيد من الرابط المرسل من البوت
+        const urlParams = new URLSearchParams(window.location.search);
+        const uid = urlParams.get('uid');
+        const balance = urlParams.get('balance');
 
-        // تهيئة إعلانات Monetag وإرسال المكافأة
+        if (uid) {
+            document.getElementById('user-info').innerHTML = `👤 المعرف: <b>${uid}</b>`;
+        } else {
+            document.getElementById('user-info').innerHTML = `👤 المستخدم غير معروف`;
+        }
+
+        if (balance !== null) {
+            document.getElementById('bal-display').innerText = balance;
+        }
+
+        // دالة عرض الخدمات حسب المنصة
+        function showServices(platform) {
+            document.getElementById('category-title').innerHTML = `<i class="fa-solid fa-chart-line"></i> خدمات ${platform}`;
+            const list = document.getElementById('services-list');
+            list.innerHTML = `
+                <div class="service-list-item"><span>زيادة متابعين ${platform}</span> <b>50 نقطة</b></div>
+                <div class="service-list-item"><span>زيادة تفاعل / إعجابات</span> <b>30 نقطة</b></div>
+            `;
+        }
+
+        // تشغيل إعلانات Monetag وإرسال المكافأة
         document.getElementById("ad-btn").onclick = () => {
             if (typeof show_11616952 === 'function') {
                 document.getElementById("msg").innerText = "⏳ جاري عرض الإعلان...";
                 show_11616952().then(() => {
                     document.getElementById("msg").innerText = "✅ تمت مشاهدة الإعلان! جاري الإضافة...";
-                    // إرسال البيانات للبوت
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const uid = urlParams.get('uid');
                     if (uid) {
                         tg.sendData(JSON.stringify({ action: "add_ad_reward", uid: parseInt(uid) }));
+                    } else {
+                        document.getElementById("msg").innerText = "⚠️ خطأ: لم يتم التعرف على معرف المستخدم.";
                     }
                 }).catch((e) => {
                     document.getElementById("msg").innerText = "⚠️ لم يكتمل الإعلان.";
