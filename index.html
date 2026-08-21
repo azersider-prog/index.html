@@ -91,15 +91,17 @@
                 show_11616952().then(() => {
                     document.getElementById("msg").innerText = "✅ تمت مشاهدة الإعلان! جاري الإضافة...";
                     if (uid) {
-                        tg.sendData(JSON.stringify({ action: "add_ad_reward", uid: parseInt(uid) }));
+                        // إرسال البيانات المحدثة للبوت وإغلاق الـ Mini App لتحديث الرصيد
+                        const payload = JSON.stringify({ action: "add_ad_reward", uid: parseInt(uid) });
+                        tg.sendData(payload);
                     } else {
                         document.getElementById("msg").innerText = "⚠️ خطأ: لم يتم التعرف على معرف المستخدم.";
                     }
                 }).catch((e) => {
-                    document.getElementById("msg").innerText = "⚠️ لم يكتمل الإعلان.";
+                    document.getElementById("msg").innerText = "⚠️ لم يكتمل الإعلان أو حدث خطأ.";
                 });
             } else {
-                document.getElementById("msg").innerText = "⚠️ الإعلان غير جاهز حالياً.";
+                document.getElementById("msg").innerText = "⚠️ الإعلان غير جاهز حالياً، جرب لاحقاً.";
             }
         };
     </script>
